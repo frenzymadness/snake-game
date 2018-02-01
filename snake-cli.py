@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import platform
 import os
+import sys
 from random import randint
 
 clear_command = 'clear' if platform.system() == 'Linux' else 'cls'
@@ -26,7 +27,7 @@ def ask_for_move():
             return move
 
 
-def do_move(move, snake_position, food_position):
+def do_move(move, snake_position, food_position, grid_size):
     head = snake_position[-1]
     x, y = head
     if move == 'N':
@@ -37,6 +38,13 @@ def do_move(move, snake_position, food_position):
         y -= 1
     elif move == 'E':
         y += 1
+
+    if (x < 0 or y < 0) or (x > grid_size - 1 or y > grid_size - 1):
+        print("It's not possible to break the limits!")
+        game_over()
+    elif (x, y) in snake_position:
+        print("It's not possible to eat yourself!")
+        game_over()
 
     if (x, y) not in food_position:
         snake_position = list(snake_position[1:])
@@ -50,7 +58,7 @@ def do_move(move, snake_position, food_position):
 def handle_food(grid_size, food_position):
     while len(food_position) < food_limit:
         food_position.append((randint(0, grid_size), randint(0, grid_size)))
-    
+
     return food_position
 
 
@@ -67,6 +75,10 @@ def print_game(grid_size, snake_position, food_position):
         print()
 
 
+def game_over():
+    sys.exit(1)
+
+
 def main():
     snake_position = [(5, 5), (5, 6), (5, 7), (5, 8)]
     food_position = []
@@ -76,7 +88,8 @@ def main():
         food_position = handle_food(grid_size, food_position)
         print_game(grid_size, snake_position, food_position)
         move = ask_for_move()
-        snake_position = do_move(move, snake_position, food_position)
+        snake_position = do_move(move, snake_position, food_position,
+                                 grid_size)
 
 
 if __name__ == '__main__':
