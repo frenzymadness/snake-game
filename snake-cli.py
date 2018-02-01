@@ -4,23 +4,23 @@ import os
 import sys
 from random import randint
 
-clear_command = 'clear' if platform.system() == 'Linux' else 'cls'
+CLEAR_COMMAND = 'clear' if platform.system() == 'Linux' else 'cls'
 
-snake_char = 'X'
-food_char = 'O'
-empty_char = ' '
+SNAKE_CHAR = 'X'
+FOOD_CHAR = 'O'
+EMPTY_CHAR = ' '
 
-food_limit = 3
+FOOD_LIMIT = 3
 
-possible_moves = ['N', 'S', 'W', 'E']
+POSSIBLE_MOVES = ['N', 'S', 'W', 'E']
 
 
 def ask_for_move():
     while True:
-        move = input('Where to move? {} :'.format(possible_moves))
+        move = input('Where to move? {} :'.format(POSSIBLE_MOVES))
         move = move.upper()
 
-        if move not in possible_moves:
+        if move not in POSSIBLE_MOVES:
             print('Unrecognized answer! Try it again.')
             continue
         else:
@@ -56,22 +56,22 @@ def do_move(move, snake_position, food_position, grid_size):
 
 
 def handle_food(grid_size, food_position):
-    while len(food_position) < food_limit:
+    while len(food_position) < FOOD_LIMIT:
         food_position.append((randint(0, grid_size), randint(0, grid_size)))
 
     return food_position
 
 
 def print_game(grid_size, snake_position, food_position):
-    os.system(clear_command)
+    os.system(CLEAR_COMMAND)
     for x in range(grid_size):
         for y in range(grid_size):
             if (x, y) in snake_position:
-                print(snake_char, end='')
+                print(SNAKE_CHAR, end='')
             elif (x, y) in food_position:
-                print(food_char, end='')
+                print(FOOD_CHAR, end='')
             else:
-                print(empty_char, end='')
+                print(EMPTY_CHAR, end='')
         print()
 
 
