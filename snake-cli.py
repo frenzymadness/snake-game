@@ -4,16 +4,47 @@ import os
 
 clear_command = 'clear' if platform.system() == 'Linux' else 'cls'
 
-snake_position = [(5, 5), (5, 6), (5, 7), (5, 8)]
-food_position = [(2, 2), (10, 10)]
-grid_size = 30
-
 snake_char = 'X'
 food_char = 'O'
 empty_char = ' '
 
+possible_moves = ['N', 'S', 'W', 'E']
 
-def print_game():
+
+def ask_for_move():
+    while True:
+        move = input('Where to move? {} :'.format(possible_moves))
+        move = move.upper()
+
+        if move not in possible_moves:
+            print('Unrecognized answer! Try it again.')
+            continue
+        else:
+            return move
+
+
+def do_move(move, snake_position, food_position):
+    head = snake_position[-1]
+    x, y = head
+    if move == 'N':
+        x -= 1
+    elif move == 'S':
+        x += 1
+    elif move == 'W':
+        y -= 1
+    elif move == 'E':
+        y += 1
+
+    if (x, y) not in food_position:
+        snake_position = list(snake_position[1:])
+    else:
+        food_position.remove((x, y))
+    snake_position.append((x, y))
+
+    return snake_position
+
+
+def print_game(grid_size, snake_position, food_position):
     os.system(clear_command)
     for x in range(grid_size):
         for y in range(grid_size):
@@ -27,7 +58,15 @@ def print_game():
 
 
 def main():
-    print_game()
+
+    snake_position = [(5, 5), (5, 6), (5, 7), (5, 8)]
+    food_position = [(2, 2), (10, 10)]
+    grid_size = 30
+
+    while True:
+        print_game(grid_size, snake_position, food_position)
+        move = ask_for_move()
+        snake_position = do_move(move, snake_position, food_position)
 
 
 if __name__ == '__main__':
